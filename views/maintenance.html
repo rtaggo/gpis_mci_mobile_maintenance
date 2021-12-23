@@ -4,22 +4,39 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" type="text/css" href="/styles/slds/assets/styles/salesforce-lightning-design-system-vf.css" />
-    <link rel="stylesheet" type="text/css" href="/styles/galigeo.css" />
   </head>
+  <style>
+    #appContainer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .slds-theme--error,
+    .slds-theme_error {
+      color: #fff;
+      background-color: #ea001e !important;
+    }
+  </style>
   <body>
     <div id="appContainer" class="ggoslds">
-      <div id="mainContainer" class="slds-grid slds-gutters slds-p-around_small" style="padding: 3rem">
-        <div class="slds-align_absolute-center" style="height: 50%">
-          <div>
-            <img src="/images/logo_gpis.png" style="height: 50px" />
-            <div class="">
-              <div class="slds-text-heading_large slds-p-around_medium" style="display: block; text-align: center">Téléchargement de l'application MCI Mobile</div>
-
-              <article class="slds-card slds-p-around-medium" style="display: block">
-                <div class="slds-card__body slds-card__body_inner slds-m-around_small">
-                  <a class="slds-button slds-button_neutral" href="http://www.teina.org/gpis/v2/app-release.apk">MCI Mobile (V2 beta)</a>
+      <div class="slds-align_absolute-center" style="height: 100%">
+        <div style="text-align: center">
+          <img src="/images/logo_gpis.png" style="height: 50px" />
+          <div class="slds-p-vertical_medium">
+            <div class="slds-notify_container slds-is-relative">
+              <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                <span class="slds-assistive-text">error</span>
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#error"></use>
+                  </svg>
+                </span>
+                <div class="slds-notify__content">
+                  <h2 class="slds-text-heading_medium">L'application MCI Mobile n'est plus disponible.</h2>
                 </div>
-              </article>
+              </div>
             </div>
           </div>
         </div>
