@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<script src="/scripts/vendors/jquery/jquery-3.3.1.min.js"></script>
+
+		<!--
+		<script src="/scripts/vendors/jquery/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+		-->
+		<script src="/scripts/vendors/jquery/jquery.touchSwipe.min.js"></script>
+		<!--
+		<script src="/scripts/vendors/jquery/jquery.scrollTo.min.js"></script>
+		<script src="/scripts/vendors/jquery/jquerymobile-swipeupdown.js"></script>
+		-->
+		
+		<script src='/scripts/vendors/mapbox/V3.1.1/mapbox.js'></script>
+		<link rel="stylesheet" type="text/css" href="/scripts/vendors/mapbox/V3.1.1/mapbox.css" />
+		<script src='/scripts/vendors/turfjs/turf.min.js'></script>
+
+		<script src='/scripts/vendors/momentjs/moment-with-locales.min.js'></script>
+
+		
+		<link rel="stylesheet" type="text/css" href="/styles/slds/assets/styles/salesforce-lightning-design-system-vf.css" />
+	
+		<link rel="stylesheet" type="text/css" href="/styles/galigeo.css" />	
+
+		<script type="module" src="./scripts/galigeo/mci/mci_chefgroup.js"></script>
+		<style>
+			html, body {
+				overflow: hidden;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		<div id="appContainer" class="ggoslds" >
+			<div class="ggoslds" >
+				<div id="topleft_container" class="top-left_container">
+					<span id="legendIcon" class="slds-icon_container slds-icon_container_circle slds-icon-action-map" style="margin-top: 5px; display: block;">
+						<svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+							<use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#standard_objects"></use>
+						</svg>
+						<span class="slds-assistive-text">Description of icon when needed</span>
+					</span>
+					<span id="basemapIcon" class="slds-icon_container slds-icon_container_circle slds-icon-action-map" style="margin-top: 5px; display: block;">
+						<svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+							<use xlink:href="/styles/slds/assets/icons/action-sprite/svg/symbols.svg#map"></use>
+						</svg>
+						<span class="slds-assistive-text">Description of icon when needed</span>
+					</span>
+					<span id="neighborhoodIcon" class="slds-icon_container slds-icon_container_circle slds-icon-action-map" style="margin-top: 5px; display: block;">
+						<svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+							<use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#checkin"></use>
+						</svg>
+						<span class="slds-assistive-text">Description of icon when needed</span>
+					</span>
+					<span id="forbiddensIcon" class="slds-icon_container slds-icon_container_circle slds-icon-action-map" style="margin-top: 5px; display: block;">
+						<svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+							<use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+						</svg>
+						<span class="slds-assistive-text">Description of icon when needed</span>
+					</span>
+					
+					<section id="legend_popover" aria-describedby="dialog-body-legend" aria-labelledby="dialog-heading-legend" class="slds-popover slds-nubbin_left-top slds-popover_small slds-hide" role="dialog">
+						<header class="slds-popover__header">
+							<h2 class="slds-text-heading_small" id="dialog-heading-legend">Légende</h2>
+						</header>
+						<div class="slds-popover__body" id="dialog-body-legend">							
+						</div>
+					</section>
+					<section id="basemap_popover" aria-describedby="dialog-body-basemap" aria-labelledby="dialog-heading-legend" class="slds-popover slds-nubbin_left slds-popover_small slds-hide" role="dialog">
+						<header class="slds-popover__header">
+							<h2 class="slds-text-heading_small" id="dialog-heading-legend">Fonds de carte</h2>
+						</header>
+						<div class="slds-popover__body" id="dialog-body-basemap">							
+						</div>
+					</section>
+				</div>
+				<div class="slds-button-group" role="group"  style="position: absolute; right: 2px; top: 4px;">
+					<div class="slds-dropdown-trigger">
+				<button class="slds-button slds-button--icon-border-filled">
+						<svg aria-hidden="true" class="slds-button__icon" style="fill: red;">
+							<use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#logout"></use>
+						</svg>
+						</button>
+
+					<div class="slds-dropdown slds-dropdown--right slds-text-heading--label slds-dropdown--menu">
+						<ul class="slds-dropdown__list" role="menu">
+						<li class="slds-dropdown__item"><a id="logoutBtn1" class="slds-truncate" role="menuitem"  style="font-size: 10px;">Se déconnecter</a></li>
+						<li class="slds-dropdown__item"><a id="logoutBtn2" class="slds-truncate" role="menuitem" style="font-size: 10px;">Fin de vacation</a></li>
+						</ul>
+					</div>
+					</div>
+				</div>
+			</div>
+			<article id="mission-card-Container" class="slds-card bottom-card" style="display: block;width: 100%;">
+				<div class="slds-card__header slds-grid">
+					<header id="maincard-header" class="slds-media slds-media_center slds-has-flexi-truncate">
+						<div class="slds-media__body">
+							<!--
+							<div id="swiper_handle" style="text-align:center;">
+								<span class="slds-icon_container slds-icon-utility-assignment">
+									<svg class="slds-icon slds-icon-text-default slds-icon_xx-small" aria-hidden="true">
+										<use xlink:href="/styles/slds/assets/icons/utility-sprite/svg/symbols.svg#assignment"></use>
+									</svg>
+									<span class="slds-assistive-text">Description of icon when needed</span>
+								</span>
+							</div>
+							-->
+						</div>
+					</header>
+				</div>
+				<div id="mainContainer-card-body" class="slds-card__body slds-card__body_inner" style="max-height: calc(100%); padding:0px;">
+					<div id="waiting4Mission" class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info" role="alert">
+						<div role="status" class="slds-spinner slds-spinner_x-small slds-spinner_inline" style=" top: 8px; left: -10px; ">
+							<span class="slds-assistive-text">Loading</span>
+							<div class="slds-spinner__dot-a"></div>
+							<div class="slds-spinner__dot-b"></div>
+						</div>
+						<h2>Chargement des missions du (des) secteur(s) ... </h2>					
+					</div>
+					<div id="missionContent" class="slds-scrollable_y slds-hide" style="position: absolute; top: 15px; left: 18px; right: 13px; bottom: 60px;">
+					</div>
+					<div id="missionListContent" class="slds-scrollable slds-hide" style="position:relative; height:100%; width:100%;">
+					</div>
+					
+				</div>
+				<footer id="missionFooter" class="slds-card__footer slds-hide" style="position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 0.5rem 0.5rem;">
+					<ul id="mission-btn-list" class="slds-button-group-row">
+						<li class="slds-button-group-item">
+							<button id="btnMissionRejoindre" class="slds-button slds-button_brand" style="padding-left: 8px; padding-right: 8px; background-color: #FFC100; border-color: #FFC100;">Rejoindre</button>
+						</li>
+						<li class="slds-button-group-item">
+							<button id="btnMissionPosition" class="slds-button slds-button_brand  slds-hide" style="padding-left: 8px; padding-right: 8px; background-color: #0070d2; border-color: #0070d2;">Position</button>
+						</li>
+						<li class="slds-button-group-item">
+							<button id="btnMissionClose" class="slds-button slds-button_brand" style="padding-left: 6px; padding-right: 6px; background-color: #000000; border-color: #000000;">Fermer</button>
+						</li>
+					</ul>
+				</footer>
+				
+			</article>
+			<div id="mainContainer" class=""></div>
+	</div>
+	<script>
+		var self = this;		
+		$(document).ready(function(e){
+			console.log(' >> document is ready');
+			$('#logoutBtn1').click(function(e){
+				GGO.disconnect(
+					self.galigeo.getChef(), 
+					self.galigeo.getVehicule().id, 
+
+					{
+						userName: self.galigeo.getUserLogin(),
+						userRole: self.galigeo.getUserRole(),
+						'baseRESTServicesURL': '/services/rest/mci',
+						'fonction': 'deconnexion'
+					}
+				);
+			});
+			$('#logoutBtn2').click(function(e){
+				GGO.disconnect(
+					self.galigeo.getChef(), 
+					self.galigeo.getVehicule().id, 
+					{
+						userName: self.galigeo.getUserLogin(),
+						userRole: self.galigeo.getUserRole(),
+						'baseRESTServicesURL': '/services/rest/mci',
+						'fonction': 'fin'
+					}
+				);
+			});
+			$('#logoutBtn3').click(function(e){
+				GGO.SessionSummaryPrompt('Bilan de la vacation', $('#appContainer'),  
+					{
+						userName: self.galigeo.getUserLogin(),
+						chefsGroupe: self.galigeo.getChefsGroupe(),
+						'baseRESTServicesURL': '/services/rest/mci'
+					}
+				);
+			});
+
+			var windowH = $(window).height();
+			$('body').css({
+				 'position': 'absolute',
+    'top': '0px',
+    'bottom': '0px',
+    'left': '0px',
+    'right': '0px', 
+				/* 'height':  windowH+'px',
+				'max-height':  windowH+'px',
+				*/
+			});
+			let userRole = sessionStorage.getItem('role');
+			let userName = sessionStorage.getItem('username');
+			let chefsGroupe = sessionStorage.getItem('chefsGroupe');
+			let chefGroupeId = parseInt(sessionStorage.getItem('chefGroupeConnectedId'),10);
+			let immatriculation = sessionStorage.getItem('immatriculation');
+
+			if (!userName) {
+				GGO.SessionIssuePrompt('Utilisateur indéfini', 'Votre nom  d\'utilisateur n\'est pas défini. Veuillez vous reconnecter.', $('#appContainer').empty());
+				return;
+			}
+			if (!userRole) {
+				GGO.SessionIssuePrompt('Rôle utilisateur indéfini', 'Votre rôle utilisateur n\'est pas défini. Veuillez vous reconnecter.', $('#appContainer').empty());
+				return;
+			}
+			if (userRole==='india') {
+				GGO.SessionIssuePrompt('Rôle India non autorisé', 'Le rôle India n\'est pas autorisé à suivre ce parcours utilisateur. Veuillez vous reconnecter.', $('#appContainer').empty());
+				return;
+			}
+			if (!chefGroupeId) {
+				GGO.SessionIssuePrompt('ID CDG non défini', 'Votre ID de chef de groupe n\'est pas défini. Veuillez vous reconnecter.', $('#appContainer').empty());
+			}
+			if (!immatriculation) {
+				GGO.SessionIssuePrompt('Immatriculation non définie', 'Votre véhicule n\'est pas défini. Veuillez vous reconnecter.', $('#appContainer').empty());
+			}
+			let secteurs = null;
+			switch(userRole) {
+				case 'charly' : case 'alpha': 
+					secteurs = sessionStorage.getItem('secteurs');
+					break;
+				default:				
+			}
+
+			if (!secteurs || (secteurs === null)) {
+				GGO.SessionIssuePrompt('Aucun secteur sélectionné', 'Aucun secteur n\'été sélectionné. Veuillez vous reconnecter.', $('#appContainer').empty());
+				return;
+			}
+
+			self.galigeo = new GGO.GGOApp ({
+				windowHeight: windowH,
+				userName:  userName,
+				userRole: userRole,
+				chefsGroupe: chefsGroupe,
+				immatriculation : JSON.parse(immatriculation),
+				chefGroupeId: chefGroupeId,
+				secteurs: JSON.parse(secteurs)
+			});
+			$('.ui-loader').remove();
+			
+		});
+	</script>
+</body>
+</html>

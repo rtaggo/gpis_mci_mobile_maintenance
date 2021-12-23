@@ -1,0 +1,30 @@
+{
+  "name": "gpis_mci_mobile_maintenance",
+  "version": "0.0.1",
+  "description": "GPIS MCI Mobile - Maintenance Mode",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rtaggo/elephantbleubygaligeo.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}
